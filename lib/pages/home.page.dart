@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noticias/pages/detalle.page.dart';
+import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +13,7 @@ class _HomePageState extends State<HomePage> {
 
   double peso =0.0;
   int edad = 0;
+  double estatura = 50;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +66,7 @@ class _HomePageState extends State<HomePage> {
           )),
           Expanded(
               child: Container(
-            
+                          
             child:Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Container(
@@ -73,6 +75,11 @@ class _HomePageState extends State<HomePage> {
                         color: Color.fromARGB(255, 114, 112, 112),
                         borderRadius: BorderRadius.circular(20.0),
                       ),
+                      child: Column(children: [Text('Estatura'),Text(estatura.toString()),Slider(value: estatura,min: 50, max:250, divisions: 200 ,onChanged: (double value){
+                        setState(() {
+                        estatura=value; 
+                        });
+                      })]),
 
                   ),
             ) ,
@@ -170,8 +177,22 @@ class _HomePageState extends State<HomePage> {
           )),
            GestureDetector(
             onTap: (){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => DetallePage())));
+              double valorCalculo = peso / (estatura * estatura);
+              String estado = "";
+              Color colorEstado= Colors.black;
+
+              if(valorCalculo < 18.5){
+                estado = "Bajo Peso";
+                colorEstado = Colors.orange;
+
+              }
+
+              if(valorCalculo > 18.5 && valorCalculo <=24.9){
+                estado="Normal";
+                colorEstado = Colors.green;
+              }
+
+              Navigator.push(context,MaterialPageRoute(builder: ((context) => DetallePage(valor: valorCalculo,estado: estado, colorEstado: colorEstado,))));
             },
            
  child: Container(
